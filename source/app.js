@@ -17,7 +17,7 @@ require([], function(){
 		camera.position.z = 500;
 		scene = new THREE.Scene();
 		//done creating scene
-		geometry = new SphereGeometry(3, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
+		geometry = new THREE.SphereBufferGeometry( 5, 32, 32 );
 		material = new THREE.MeshBasicMaterial( { color: 0x1C6BA0 } );
 		mesh = new THREE.Mesh( geometry, material );
 		scene.add( mesh );
