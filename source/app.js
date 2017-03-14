@@ -17,10 +17,11 @@ require([], function(){
 		camera.position.z = 500;
 		scene = new THREE.Scene();
 		//done creating scene
-		geometry = new THREE.SphereBufferGeometry( 5, 32, 32 );
-		material = new THREE.MeshBasicMaterial( { color: 0x1C6BA0 } );
-		mesh = new THREE.Mesh( geometry, material );
-		scene.add( mesh );
+		var geometry = new THREE.SphereBufferGeometry( 5, 32, 32 );
+		var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+		var sphere = new THREE.Mesh( geometry, material );
+		scene.add( sphere );
+		
 		renderer = new THREE.CanvasRenderer();
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		document.body.appendChild( renderer.domElement );
@@ -28,8 +29,8 @@ require([], function(){
 	function animate()
 	{
 		requestAnimationFrame( animate );
-		mesh.rotation.x = Date.now() * 0.00005;
-		mesh.rotation.y = Date.now() * 0.0001;
+		sphere.rotation.x = Date.now() * 0.00005;
+		sphere.rotation.y = Date.now() * 0.0001;
 		renderer.render( scene, camera );
 	}
 })
