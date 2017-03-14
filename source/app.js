@@ -16,9 +16,9 @@ require([], function(){
 		window.innerHeight, 1, 1000 );
 		camera.position.z = 500;
 		scene = new THREE.Scene();
-		geometry = new THREE.IcosahedronGeometry( 200, 1 );
-		material = new THREE.MeshBasicMaterial( { color: 0x000000,
-		wireframe: true, wireframeLinewidth: 2 } );
+		//done creating scene
+		geometry = new SphereGeometry(3, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
+		material = new THREE.MeshBasicMaterial( { color: 0x1C6BA0 } );
 		mesh = new THREE.Mesh( geometry, material );
 		scene.add( mesh );
 		renderer = new THREE.CanvasRenderer();
