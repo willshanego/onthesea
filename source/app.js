@@ -9,7 +9,7 @@ require([], function(){
     var camera, scene, renderer;
 	var geometry, material, mesh;
 	init();
-	animate();
+	//animate();
 	function init() 
 		{
 		camera = new THREE.PerspectiveCamera( 75, window.innerWidth /
@@ -26,11 +26,12 @@ require([], function(){
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		document.body.appendChild( renderer.domElement );
 		}
-	function animate()
+	/*function animate()
 	{
 		requestAnimationFrame( animate );
 		sphere.rotation.x = Date.now() * 0.00005;
 		sphere.rotation.y = Date.now() * 0.0001;
 		renderer.render( scene, camera );
 	}
+	*/
 })
