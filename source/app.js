@@ -36,8 +36,8 @@ require([], function(){
 	function animate()
 	{
 		requestAnimationFrame( animate );
-		mesh.rotation.x = Date.now() * 0.00005;
-		mesh.rotation.y = Date.now() * 0.0001;
+		planet.rotation.x = Date.now() * 0.00005;
+		planet.rotation.y = Date.now() * 0.0001;
 		renderer.render( scene, camera );
 	}
 })
