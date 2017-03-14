@@ -7,7 +7,9 @@ require([], function(){
     }
 
     var camera, scene, renderer;
-	var geometry, material, mesh;
+	var planetgeo, planetmaterial, planet;
+	var charactergeo, charactermaterial, character;
+	
 	init();
 	animate();
 	function init() 
@@ -16,10 +18,17 @@ require([], function(){
 		window.innerHeight, 1, 1000 );
 		camera.position.z = 500;
 		scene = new THREE.Scene();
-		geometry = new THREE.IcosahedronGeometry( 200, 1 );
-		material = new THREE.MeshBasicMaterial( { shading: THREE.SmoothShading } );
-		mesh = new THREE.Mesh( geometry, material );
-		scene.add( mesh );
+		//create planet
+		planetgeo         = new THREE.IcosahedronGeometry( 200, 1 );
+		planetmaterial    = new THREE.MeshBasicMaterial( { shading: THREE.SmoothShading } );
+		planet            = new THREE.Mesh( planetgeo, planetmaterial );
+		scene.add( planet );
+		//create character
+		charactergeo      = new THREE.CylinderGeometry( 5, 5, 20, 32 );
+		charactermaterial = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+		character         = new THREE.Mesh( charactergeo, material );
+		scene.add( character );
+		//
 		renderer = new THREE.CanvasRenderer();
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		document.body.appendChild( renderer.domElement );
