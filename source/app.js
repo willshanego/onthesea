@@ -17,8 +17,7 @@ require([], function(){
 		camera.position.z = 500;
 		scene = new THREE.Scene();
 		geometry = new THREE.IcosahedronGeometry( 200, 1 );
-		material = new THREE.MeshBasicMaterial( { color: 0x000000,
-		wireframe: true, wireframeLinewidth: 2 } );
+		material = new THREE.MeshBasicMaterial( { shading: THREE.SmoothShading } );
 		mesh = new THREE.Mesh( geometry, material );
 		scene.add( mesh );
 		renderer = new THREE.CanvasRenderer();
