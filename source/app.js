@@ -19,17 +19,16 @@ require([], function(){
 		camera.position.z = 500;
 		scene = new THREE.Scene();
 		//create planet
-		planetgeo         = new THREE.IcosahedronGeometry( 200, 1 );
-		planetmaterial    = new THREE.MeshBasicMaterial( { shading: THREE.SmoothShading } );
+		planetgeo         = new THREE.SphereBufferGeometry( 200, 150, 150 );
+		planetmaterial    = new THREE.MeshNormalMaterial ( {shading: THREE.SmoothShading, overdraw: true} );
 		planet            = new THREE.Mesh( planetgeo, planetmaterial );
 		scene.add( planet );
-		//create character
-		/*
-		charactergeo      = new THREE.CylinderGeometry( 5, 5, 20, 32 );
-		charactermaterial = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-		character         = new THREE.Mesh( charactergeo, material );
+		//create character 
+		charactergeo      = new THREE.IcosahedronGeometry( 50, 1 );
+		charactermaterial = new THREE.MeshNormalMaterial( {shading: THREE.SmoothShading} );
+		character         = new THREE.Mesh( charactergeo, charactermaterial );
+		character.translateOnAxis( new THREE.Vector3(0,250,0), 1);
 		scene.add( character );
-		*/
 		//
 		renderer = new THREE.CanvasRenderer();
 		renderer.setSize( window.innerWidth, window.innerHeight );
@@ -38,8 +37,9 @@ require([], function(){
 	function animate()
 	{
 		requestAnimationFrame( animate );
-		planet.rotation.x = Date.now() * 0.00005;
-		planet.rotation.y = Date.now() * 0.0001;
+		planet.rotation.x = Date.now() * 0.05;
+		planet.rotation.y = Date.now() * 0.01;
+		
 		renderer.render( scene, camera );
 	}
 })
