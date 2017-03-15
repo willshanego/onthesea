@@ -24,10 +24,12 @@ require([], function(){
 		planet            = new THREE.Mesh( planetgeo, planetmaterial );
 		scene.add( planet );
 		//create character
+		/*
 		charactergeo      = new THREE.CylinderGeometry( 5, 5, 20, 32 );
 		charactermaterial = new THREE.MeshBasicMaterial( {color: 0xffff00} );
 		character         = new THREE.Mesh( charactergeo, material );
 		scene.add( character );
+		*/
 		//
 		renderer = new THREE.CanvasRenderer();
 		renderer.setSize( window.innerWidth, window.innerHeight );
