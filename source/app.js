@@ -45,35 +45,21 @@ require([], function(){
         scene.add(ambient);
         scene.add(directionalLight);
 		//load model
-		var manager = new THREE.LoadingManager();
-		manager.onProgress = function ( item, loaded, total )
-		    {
-			console.log( item, loaded, total );
-			};
-			// model
-		var loader = new THREE.OBJLoader( manager );
-		loader.load( 'boat.json', function ( boat )
-			{
-			boat.traverse( function ( child ) {
-				if ( child instanceof THREE.Mesh )
-				{
-				//child.material.map = texture;
-				}
-			} 
-			);
+		// instantiate a loader
+		var loader = new THREE.JSONLoader();
 
-				boat.position.x = - 60;
-                boat.rotation.x = 20* Math.PI / 180;
-                boat.rotation.z = 20* Math.PI / 180;
-                boat.scale.x = 30;
-                boat.scale.y = 30;
-                boat.scale.z = 30;
-				scene.add( boat );
-				} );
-
-
-
-
+		// load a resource
+		loader.load
+		(
+			// resource URL
+			'vendor/boat.json',
+			// Function when resource is loaded
+			function ( geometry, materials ) {
+				var boatmaterial = new THREE.MultiMaterial( materials );
+				var boatobject = new THREE.Mesh( geometry, material );
+				scene.add( boatobject );
+			}
+		);
 
 		//create planet
 		planetgeo         = new THREE.SphereBufferGeometry( radius, 80, 80 );
