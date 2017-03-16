@@ -13,6 +13,7 @@ require([], function(){
 	var charactergeo, charactermaterial, character;
 	var objects;
 	var zvalue;
+	var wave, normal, planeForCircle, sphereForCircle;
 	var raindrop; 
 
 	//
@@ -26,6 +27,8 @@ require([], function(){
 		window.innerHeight, 1, 1000 );
 		camera.position.z = 500;
 		scene = new THREE.Scene();
+		wave = new THREE.Shape();
+		sphereForCircle = new THREE.Sphere((0,0,0),radius)
 		var axisHelper = new THREE.AxisHelper( 5 );
 		scene.add( axisHelper );
 		//create clock
@@ -58,6 +61,7 @@ require([], function(){
 		//planet.rotation.x = Date.now() * 0.00005;
 		//planet.rotation.y = Date.now() * 0.0001;
 		controls.update(clock.getDelta());
+		//createwave();
 		renderer.render( scene, camera );
 	}
 	
@@ -77,7 +81,18 @@ require([], function(){
 		 var distance = - camera.position.z / dir.z;
 
 	     raindrop = camera.position.clone().add( dir.multiplyScalar( distance ) );
-	     console.log(raindrop);
-
+	     //console.log(raindrop);
+	     zvalue = Math.sqrt(Math.pow(radius,2)-Math.pow(raindrop.x,2)-Math.pow(raindrop.y,2))
+		 //console.log(zvalue);	
+		 normal = new THREE.Vector3( (raindrop.x-0), (raindrop.y-0), (zvalue-0));
+		 planeForCircle = new THREE.Plane(normal, radius) ;
+		 console.log(planeForCircle.Vector3);	
+		 console.log(normal);	
 	}, false);
+
+	function createwave()
+	{
+		
+		//wave.moveTo (raindrop.x, raindrop.y, zvalue);
+	}
 })
