@@ -15,7 +15,9 @@ require([], function(){
 	var zvalue;
 	var wave, normal, planeForCircle, sphereForCircle;
 	var raindrop; 
-
+	var ambient, directionalLight;
+	var boat;
+	
 	//
 	init();
 	animate();
@@ -36,14 +38,51 @@ require([], function(){
 		controls = new THREE.TrackballControls(camera);
 		controls.movementSpeed = 100;
 		controls.lookSpeed = 0.1;
+		//create light
+		ambient = new THREE.AmbientLight(0x666666);
+		directionalLight = new THREE.DirectionalLight(0xffeedd);
+        directionalLight.position.set(0, 70, 100).normalize();
+        scene.add(ambient);
+        scene.add(directionalLight);
+		//load model
+		var manager = new THREE.LoadingManager();
+		manager.onProgress = function ( item, loaded, total )
+		    {
+			console.log( item, loaded, total );
+			};
+			// model
+		var loader = new THREE.OBJLoader( manager );
+		loader.load( 'boat.obj', function ( boat )
+			{
+			boat.traverse( function ( child ) {
+				if ( child instanceof THREE.Mesh )
+				{
+				//child.material.map = texture;
+				}
+			} 
+			);
+
+				boat.position.x = - 60;
+                boat.rotation.x = 20* Math.PI / 180;
+                boat.rotation.z = 20* Math.PI / 180;
+                boat.scale.x = 30;
+                boat.scale.y = 30;
+                boat.scale.z = 30;
+				scene.add( boat );
+				} );
+
+
+
+
+
 		//create planet
 		planetgeo         = new THREE.SphereBufferGeometry( radius, 80, 80 );
-		planetmaterial    = new THREE.MeshBasicMaterial ( {shading: THREE.SmoothShading, overdraw: true, color: 0x0077BE} );
+		planetmaterial    = new THREE.MeshPhongMaterial ( {shading: THREE.SmoothShading, overdraw: true, color: 0x0077BE} );
 		planet            = new THREE.Mesh( planetgeo, planetmaterial );
 		scene.add( planet );
 		//create character 
 		charactergeo      = new THREE.IcosahedronGeometry( 25, 1 );
-		charactermaterial = new THREE.MeshNormalMaterial( {shading: THREE.SmoothShading} );
+		charactermaterial = new THREE.MeshPhongMaterial( {shading: THREE.SmoothShading} );
 		character         = new THREE.Mesh( charactergeo, charactermaterial );
 		character.translateOnAxis( new THREE.Vector3(0,125,0), 1);
 		scene.add( character );
@@ -58,8 +97,8 @@ require([], function(){
 	function animate()
 	{
 		requestAnimationFrame( animate );
-		//planet.rotation.x = Date.now() * 0.00005;
-		//planet.rotation.y = Date.now() * 0.0001;
+		planet.rotation.x = Date.now() * 0.00005;
+		planet.rotation.y = Date.now() * 0.0001;
 		controls.update(clock.getDelta());
 		//createwave();
 		renderer.render( scene, camera );
@@ -95,4 +134,12 @@ require([], function(){
 		
 		//wave.moveTo (raindrop.x, raindrop.y, zvalue);
 	}
+	function createScene(geometry, x, y, z, scale, tmap)
+	{
+            zmesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(tmap)}));
+            zmesh.position.set(x, y, z);
+            zmesh.scale.set(scale, scale, scale);
+            meshes.push(zmesh);
+            scene.add(zmesh);
+    }
 })
