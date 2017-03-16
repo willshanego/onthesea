@@ -52,7 +52,7 @@ require([], function(){
 			};
 			// model
 		var loader = new THREE.OBJLoader( manager );
-		loader.load( 'boat.obj', function ( boat )
+		loader.load( 'boat.json', function ( boat )
 			{
 			boat.traverse( function ( child ) {
 				if ( child instanceof THREE.Mesh )
