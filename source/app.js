@@ -14,7 +14,7 @@ require([], function() {
     var boat;
     var objects;
     var normal, zvalue, radius;
-    var raindrop, vectorA, vectorB, vectorV;
+    var raindrop, vectorA, vectorB, vectorV, vectorI;
 
     //
     init();
@@ -80,7 +80,7 @@ require([], function() {
         //create wave
         //
         objects = [planet, character];
-        planet.material.opacity = .2;
+        planet.material.opacity = 1;
         //
         renderer = new THREE.CanvasRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -108,45 +108,14 @@ require([], function() {
 
         if (intersects.length > 0) {
             raindrop = intersects[0].point;
-            if (INTERSECTED != intersects[0].object) {
+            /*if (INTERSECTED != intersects[0].object) {
                 if (INTERSECTED)
                     INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
                 INTERSECTED = intersects[0].object;
                 INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
                 INTERSECTED.material.emissive.setHex(0xff0000);
-            }
+            }*/
         }
-        else 
-        	raindrop = (0,0,0);
-        console.log(raindrop);
-        /*
-		 var vector = new THREE.Vector3();
-
-		 vector.set(
-			( event.clientX / window.innerWidth ) * 2 - 1,
-			- ( event.clientY / window.innerHeight ) * 2 + 1,
-			0.5 );
-
-		 vector.unproject( camera );
-
-		 var dir = vector.sub( camera.position ).normalize();
-
-		 var distance = - camera.position.z / dir.z;
-		 */
-
-        //raindrop = camera.position.clone().add( dir.multiplyScalar( distance ) );
-        //raindrop.clone(raycaster.point);
-        //console.log(raindrop);
-        //raindrop is the point where someone clicks at, no z value.
-        //get z value at the point
-        //zvalue = Math.sqrt(Math.pow(planetradius,2)-Math.pow(raindrop.x,2)-Math.pow(raindrop.y,2))
-
-        //get vector going from origin to raindrop
-        //normal = new THREE.Vector3( (raindrop.x-0), (raindrop.y-0), (zvalue-0));
-        //console.log(normal.z);
-
-        //planeForCircle = new THREE.Plane(normal, planetradius) ;
-        //console.log(planeForCircle.Vector3);	
         createPerpendicularVectors();
         createWave();
     }, false);
@@ -158,14 +127,17 @@ require([], function() {
             color: 0xFFFFFF
         });
         radius = 10;
-        for (var i = 0; i <= segmentCount; i++) {
-            var theta = (i / segmentCount) * Math.PI * 2;
-            wavegeometry.vertices.push(new THREE.Vector3(
-            raindrop.x + radius * Math.cos(theta) * vectorA.x + radius * Math.sin(theta) * vectorB.x,
-            raindrop.y + radius * Math.cos(theta) * vectorA.y + radius * Math.sin(theta) * vectorB.y,
-            raindrop.z + radius * Math.cos(theta) * vectorA.z + radius * Math.sin(theta) * vectorB.z 
-            ));
-        }
+        for (var i = 0; i <= segmentCount; i++) 
+        	{
+				var theta = (i / segmentCount) * Math.PI * 2;
+				wavegeometry.vertices.push(new THREE.Vector3
+					(
+					 raindrop.x + radius * Math.cos(theta) * vectorA.x + radius * Math.sin(theta) * vectorB.x,
+					 raindrop.y + radius * Math.cos(theta) * vectorA.y + radius * Math.sin(theta) * vectorB.y,
+					 raindrop.z + radius * Math.cos(theta) * vectorA.z + radius * Math.sin(theta) * vectorB.z 
+					)
+				);
+    	    }
         scene.add(new THREE.Line(wavegeometry,wavematerial));
     }
     function createScene(geometry, x, y, z, scale, tmap) {
@@ -181,24 +153,36 @@ require([], function() {
     function createPerpendicularVectors() {
         vectorV = new THREE.Vector3();
         vectorV.copy(raindrop);
-        vectorV.normalize();
+        
         //console.log(vectorV);
 
-		vectorA = new THREE.Vector3(100,100,0);
-        //vectorA.reflect(vectorV);
-        vectorA.normalize();
-        console.log(vectorA);
+        //var plane = new THREE.Plane( vectorV, planetradius );
+        //console.log(plane);
+		vectorA = new THREE.Vector3
+		(
+			 1/vectorV.x, 
+			 1/vectorV.y, 
+		  -2*(1/vectorV.z)
+		);
+		console.log(vectorA);
+
+		//var angle = Math.PI / 4;
+		//var axis = new THREE.Vector3(0,0,0).normalize();
+		//vectorA.copy(vectorV);
+		//vectorA.applyAxisAngle(vectorV,angle);
+		
+		//console.log(vectorA);
+		vectorV.normalize();
+		vectorA.normalize();
+		console.log(vectorV);
+		console.log(vectorA);
+		console.log(vectorA.dot(vectorV));
+        
 
         vectorB = new THREE.Vector3();
         vectorB.crossVectors(vectorV, vectorA);
         vectorB.normalize();
-        //console.log(vectorB);
-        //console.log((radius*Math.cos(2)*vectorA.x + radius*Math.sin(2)*vectorB.x));
-        //console.log(vectorV);
-        //console.log(vectorA);	
-        //console.log(vectorB);
-        //vectorA.getTangent(vectorV);
-        //vectorB.getTangent(vectorA);
+        
     }
 
     function randPoint() {
@@ -212,3 +196,54 @@ require([], function() {
 //x=Math.cos(theta) * radius,
             //y=Math.sin(theta) * radius,
             //z0));            
+
+            //vectorA.reflect(vectorV);
+
+//console.log(vectorB);
+        //console.log((radius*Math.cos(2)*vectorA.x + radius*Math.sin(2)*vectorB.x));
+        //console.log(vectorV);
+        //console.log(vectorA);	
+        //console.log(vectorB);
+        //vectorA.getTangent(vectorV);
+        //vectorB.getTangent(vectorA);
+
+
+                
+        
+/*vectorV = new THREE.Vector3();
+        vectorV.copy(raindrop);
+        //vectorV.normalize();
+        console.log(vectorV);
+
+		
+		var plane = new THREE.Plane( vectorV );
+		console.log(plane);
+		vectorA = new THREE.Vector3();
+		plane.projectPoint(vectorV, vectorA );
+        vectorA.sub(vectorV);
+        
+		vectorV.normalize();
+		vectorA.normalize();
+		console.log(vectorA);
+		
+        vectorB = new THREE.Vector3();
+        vectorB.crossVectors(vectorV, vectorA);
+        vectorB.normalize();
+        //console.log(vectorB);*/
+/*
+        vectorV = new THREE.Vector3();
+        vectorV.copy(raindrop);
+        vectorV.normalize();
+        var plane = new THREE.Plane( vectorV );
+        vectorA = new THREE.Vector3();
+        console.log(vectorV);
+		plane.projectPoint(vectorV, vectorA );
+		console.log(vectorA);	
+		vectorI = new THREE.Vector3();
+		vectorI.lerpVectors( vectorV, vectorA, .5) ;
+		console.log(vectorI);
+		vectorB = new THREE.Vector3();
+        vectorB.crossVectors(vectorI, vectorV);
+        vectorB.normalize();
+        console.log(vectorB);
+        */
