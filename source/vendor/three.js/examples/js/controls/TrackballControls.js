@@ -235,7 +235,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	};
 
-	this.panCamera = ( function() {
+	/*this.panCamera = ( function() {
 
 		var mouseChange = new THREE.Vector2(),
 			objectUp = new THREE.Vector3(),
@@ -269,7 +269,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		};
 
-	}() );
+	}() );*/
 
 	this.checkDistances = function () {
 
@@ -309,11 +309,13 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		}
 
+		/*
 		if ( ! _this.noPan ) {
 
 			_this.panCamera();
 
 		}
+		*/
 
 		_this.object.position.addVectors( _this.target, _eye );
 
