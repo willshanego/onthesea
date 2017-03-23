@@ -10,9 +10,9 @@ require([], function() {
     var ambient, directionalLight;
     var controls, clock;
     var planetgeo, planetmaterial, planet, planetradius;
-    var charactergeo, charactermaterial, character;
+    var moongeo, moonmaterial, moon;
     var boat;
-    var objects;
+    var objects, raindropArray, raindropCount;
     var normal, zvalue, radius;
     var raindrop, vectorA, vectorB, vectorV, vectorI;
 
@@ -23,12 +23,13 @@ require([], function() {
         //create scene, projector, camera, axis, etc
         projector = new THREE.Projector();
         camera = new THREE.PerspectiveCamera(75,window.innerWidth / window.innerHeight,1,1000);
-        camera.position.z = 500;
+        camera.position.z = 100;
         scene = new THREE.Scene();
         axisHelper = new THREE.AxisHelper(5);
         scene.add(axisHelper);
         raycaster = new THREE.Raycaster();
         raindrop = new THREE.Vector3();
+
 
         //create clock
         clock = new THREE.Clock();
@@ -36,12 +37,14 @@ require([], function() {
         controls.movementSpeed = 100;
         controls.lookSpeed = 0.1;
 
+
         //create light
         ambient = new THREE.AmbientLight(0x666666);
         directionalLight = new THREE.DirectionalLight(0xffeedd);
         directionalLight.position.set(0, 70, 100).normalize();
         scene.add(ambient);
         scene.add(directionalLight);
+
 
         //init vectors
         //vectorV = new THREE.Vector3();
@@ -59,9 +62,10 @@ require([], function() {
             scene.add(boatobject);
         });
 
+
         //create planet
-        planetradius = 100;
-        planetgeo = new THREE.SphereBufferGeometry(planetradius,80,80);
+        planetradius = 50;
+        planetgeo = new THREE.SphereBufferGeometry(planetradius,100,100);
         planetmaterial = new THREE.MeshPhongMaterial({
             shading: THREE.SmoothShading,
             overdraw: true,
@@ -69,19 +73,22 @@ require([], function() {
         });
         planet = new THREE.Mesh(planetgeo,planetmaterial);
         scene.add(planet);
-        //create character 
-        charactergeo = new THREE.IcosahedronGeometry(25,1);
-        charactermaterial = new THREE.MeshPhongMaterial({
+
+
+        //create moon 
+        moongeo = new THREE.IcosahedronGeometry(5,1);
+        moonmaterial = new THREE.MeshPhongMaterial({
             shading: THREE.SmoothShading
         });
-        character = new THREE.Mesh(charactergeo,charactermaterial);
-        character.translateOnAxis(new THREE.Vector3(0,125,0), 1);
-        scene.add(character);
-        //create wave
-        //
-        objects = [planet, character];
+        moon = new THREE.Mesh(moongeo,moonmaterial);
+        moon.translateOnAxis(new THREE.Vector3(0,0,-70), 1);
+        scene.add(moon);
+
+
+        objects = [planet, moon];
         planet.material.opacity = 1;
-        //
+
+        //renderer
         renderer = new THREE.CanvasRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
@@ -89,8 +96,16 @@ require([], function() {
 
     function animate() {
         requestAnimationFrame(animate);
-        //planet.rotation.x = Date.now() * 0.00005;
-        //planet.rotation.y = Date.now() * 0.0001;
+        /*
+        planet.rotation.x = Date.now() * 0.00005;
+        planet.rotation.y = Date.now() * 0.0001;
+        directionalLight.rotation.x = Date.now() * 0.05;
+        directionalLight.rotation.y = Date.now() * 0.1;
+        directionalLight.rotation.z = Date.now() * 0.1;
+        moon.rotation.x = Date.now() * 0.00005;
+        moon.rotation.y = Date.now() * 0.0001;
+        moon.rotation.z += 0.001;
+        */
         controls.update(clock.getDelta());
         //createwave();
         renderer.render(scene, camera);
@@ -126,15 +141,19 @@ require([], function() {
         var wavematerial = new THREE.LineBasicMaterial({
             color: 0xFFFFFF
         });
-        radius = 10;
+        radius = .1;
+        //create a circle, call the animate function, delete the circle
+        //find a way to scale it down each time
+        //variables to scale: radius, raindrop vector. 
+        //while something is 100%, go down to 0%
         for (var i = 0; i <= segmentCount; i++) 
         	{
 				var theta = (i / segmentCount) * Math.PI * 2;
 				wavegeometry.vertices.push(new THREE.Vector3
 					(
-					 raindrop.x + radius * Math.cos(theta) * vectorA.x + radius * Math.sin(theta) * vectorB.x,
-					 raindrop.y + radius * Math.cos(theta) * vectorA.y + radius * Math.sin(theta) * vectorB.y,
-					 raindrop.z + radius * Math.cos(theta) * vectorA.z + radius * Math.sin(theta) * vectorB.z 
+					 raindrop.x + radius * (Math.cos(theta) * vectorA.x + Math.sin(theta) * vectorB.x),
+					 raindrop.y + radius * (Math.cos(theta) * vectorA.y + Math.sin(theta) * vectorB.y),
+					 raindrop.z + radius * (Math.cos(theta) * vectorA.z + Math.sin(theta) * vectorB.z) 
 					)
 				);
     	    }
