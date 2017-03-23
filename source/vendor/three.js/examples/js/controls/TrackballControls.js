@@ -37,7 +37,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	// internals
 
-	this.target = new THREE.Vector3();
+	this.target = new THREE.Vector3(0,50,0);
 
 	var EPS = 0.000001;
 

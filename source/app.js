@@ -14,7 +14,7 @@ require([], function() {
     var boat;
     var objects, raindropArray, raindropCount;
     var normal, zvalue, radius;
-    var raindrop, vectorA, vectorB, vectorV, vectorI;
+    var raindrop, wave, vectorA, vectorB, vectorV, vectorI;
 
     //
     init();
@@ -23,7 +23,10 @@ require([], function() {
         //create scene, projector, camera, axis, etc
         projector = new THREE.Projector();
         camera = new THREE.PerspectiveCamera(75,window.innerWidth / window.innerHeight,1,1000);
-        camera.position.z = 100;
+        camera.position.x = 0;
+        camera.position.y = 35;
+        camera.position.z = 45;
+        camera.lookAt = new THREE.Vector3(80,80,80);
         scene = new THREE.Scene();
         axisHelper = new THREE.AxisHelper(5);
         scene.add(axisHelper);
@@ -33,17 +36,19 @@ require([], function() {
 
         //create clock
         clock = new THREE.Clock();
-        controls = new THREE.TrackballControls(camera);
-        controls.movementSpeed = 100;
-        controls.lookSpeed = 0.1;
+        //controls = new THREE.TrackballControls(camera);
+        //controls.movementSpeed = 100;
+        //controls.lookSpeed = 0.1;
 
 
         //create light
+        /*
         ambient = new THREE.AmbientLight(0x666666);
         directionalLight = new THREE.DirectionalLight(0xffeedd);
         directionalLight.position.set(0, 70, 100).normalize();
         scene.add(ambient);
         scene.add(directionalLight);
+        */
 
 
         //load model
@@ -55,7 +60,7 @@ require([], function() {
         //create planet
         planetradius = 50;
         planetgeo = new THREE.SphereBufferGeometry(planetradius,100,100);
-        planetmaterial = new THREE.MeshPhongMaterial({
+        planetmaterial = new THREE.MeshBasicMaterial({
             shading: THREE.SmoothShading,
             overdraw: true,
             color: 0x0077BE
@@ -66,7 +71,7 @@ require([], function() {
 
         //create moon 
         moongeo = new THREE.IcosahedronGeometry(5,1);
-        moonmaterial = new THREE.MeshPhongMaterial({
+        moonmaterial = new THREE.MeshBasicMaterial({
             shading: THREE.SmoothShading
         });
         moon = new THREE.Mesh(moongeo,moonmaterial);
@@ -95,9 +100,12 @@ require([], function() {
         moon.rotation.y = Date.now() * 0.0001;
         moon.rotation.z += 0.001;
         */
-        controls.update(clock.getDelta());
+       
+        	
+        //controls.update(clock.getDelta());
         //createwave();
         renderer.render(scene, camera);
+
     }
 
     renderer.domElement.addEventListener('mousemove', function(event) {
@@ -107,8 +115,9 @@ require([], function() {
     }, false);
 
     renderer.domElement.addEventListener('mousedown', function(event) {
+       removeEntity(wave);
        raycaster.setFromCamera(mouse, camera);
-       var intersects = raycaster.intersectObjects(scene.children);
+       var intersects = raycaster.intersectObjects(scene.children); //make this so it's only the planet.
 
        if (intersects.length > 0) 
        	   {
@@ -140,7 +149,9 @@ require([], function() {
 					)
 				);
     	    }
-        scene.add(new THREE.Line(wavegeometry,wavematerial));
+    	wave = new THREE.Line(wavegeometry,wavematerial);
+        scene.add(wave);
+   
     }
 
     function createScene(geometry, x, y, z, scale, tmap) {
@@ -191,6 +202,11 @@ require([], function() {
     function randPoint() {
         return Math.random() * 2 - 1;
     }
+
+    function removeEntity(object) {
+		scene.remove( object );
+	}
+
 
 })
 
