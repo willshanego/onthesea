@@ -4,18 +4,20 @@ require([], function() {
         Detector.addGetWebGLMessage();
         throw 'WebGL Not Available'
     }
-
+	//threejs
     var mouse = new THREE.Vector2(), INTERSECTED;
     var projector, camera, scene, renderer, mousePosition, raycaster, axisHelper;
     var ambient, directionalLight;
     var controls, clock;
-    var planetgeo, planetmaterial, planet, planetradius;
+    var planetgeo, planetmaterial, planet, planetRadius;
     var moongeo, moonmaterial, moon;
     var boat;
     var objects, raindropArray, raindropCount;
     var normal, zvalue, radius;
     var raindrop, wave, vectorA, vectorB, vectorV, vectorI;
-    var snow, snowflake;
+    var snow, snowflake, mathPlanet;
+
+    
 
     //
     init();
@@ -59,8 +61,8 @@ require([], function() {
 
 
         //create planet
-        planetradius = 50;
-        planetgeo = new THREE.SphereBufferGeometry(planetradius,100,100);
+        planetRadius = 50;
+        planetgeo = new THREE.SphereBufferGeometry(planetRadius,100,100);
         planetmaterial = new THREE.MeshBasicMaterial({
             shading: THREE.SmoothShading,
             overdraw: true,
@@ -68,6 +70,7 @@ require([], function() {
         });
         planet = new THREE.Mesh(planetgeo,planetmaterial);
         scene.add(planet);
+        mathPlanet = new THREE.Sphere( THREE.Vector3(0,0,0), planetRadius);
 
 
         //create moon 
@@ -92,6 +95,7 @@ require([], function() {
         renderer = new THREE.CanvasRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
+   
 
         
     }
@@ -102,8 +106,14 @@ require([], function() {
 		vertices.forEach(function (v) {
                 v.y = v.y - (v.velocityY);
                 v.x = v.x - (v.velocityX);
+                var temp = new THREE.Vector3(v.x,v.y,v.z);
 				//see if you can create a vector at the point when these points intersect with
 				//the radius
+				if (mathPlanet.containsPoint ( temp ))
+				{
+					raindrop.copy(temp);
+					
+				}
                 if (v.y <= 0) v.y = 60;
                 if (v.x <= -20 || v.x >= 20) v.velocityX = v.velocityX * -1;
             });
@@ -117,7 +127,8 @@ require([], function() {
         moon.rotation.y = Date.now() * 0.0001;
         moon.rotation.z += 0.001;
         */
-       
+       	createPerpendicularVectors();
+		createWave();
         	
         //controls.update(clock.getDelta());
         //createwave();
@@ -150,7 +161,7 @@ require([], function() {
         var wavematerial = new THREE.LineBasicMaterial({
             color: 0xFFFFFF
         });
-        radius = .2;
+        radius = .02;
         //create a circle, call the animate function, delete the circle
         //find a way to scale it down each time
         //variables to scale: radius, raindrop vector. 
@@ -160,8 +171,8 @@ require([], function() {
 				var theta = (i / segmentCount) * Math.PI * 2;
 				wavegeometry.vertices.push(new THREE.Vector3
 					(
-					 (raindrop.x+.1) + radius * (Math.cos(theta) * vectorA.x + Math.sin(theta) * vectorB.x),
-					 (raindrop.y+.1) + radius * (Math.cos(theta) * vectorA.y + Math.sin(theta) * vectorB.y),
+					 (raindrop.x+.2) + radius * (Math.cos(theta) * vectorA.x + Math.sin(theta) * vectorB.x),
+					 (raindrop.y+.2) + radius * (Math.cos(theta) * vectorA.y + Math.sin(theta) * vectorB.y),
 					 (raindrop.z+.1) + radius * (Math.cos(theta) * vectorA.z + Math.sin(theta) * vectorB.z) 
 					)
 				);
@@ -187,7 +198,7 @@ require([], function() {
         
         //console.log(vectorV);
 
-        //var plane = new THREE.Plane( vectorV, planetradius );
+        //var plane = new THREE.Plane( vectorV, planetRadius );
         //console.log(plane);
 		vectorA = new THREE.Vector3
 		(
@@ -209,7 +220,6 @@ require([], function() {
 		console.log(vectorA);
 		console.log(vectorA.dot(vectorV));
         
-
         vectorB = new THREE.Vector3();
         vectorB.crossVectors(vectorV, vectorA);
         vectorB.normalize();
@@ -226,15 +236,15 @@ require([], function() {
 
 	function createSnow() {
 		var snowGeometry = new THREE.Geometry();
-        var snowMaterial = new THREE.PointsMaterial({ size: 0.1, map: snowflake});
+        var snowMaterial = new THREE.PointsMaterial({ size: 0.04, map: snowflake});
 
 
-            var range = 80;
+            var range = 10;
             for (var i = 0; i < 1500; i++) {
                 var points = new THREE.Vector3(
-                        Math.random() * range - range / 2,
-                        Math.random() * range * 1.5,
-                        Math.random() * range - range / 2);
+                        (Math.random()+1) * range - range / 2,
+                        (Math.random()+1) * range * 1.5,
+                        (Math.random()+3.5) * range - range / 2);
                 points.velocityY = 0.1 + Math.random() / 5;
                 points.velocityX = (Math.random() - 0.5) / 3;
                 snowGeometry.vertices.push(points);
