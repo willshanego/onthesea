@@ -225,12 +225,8 @@ require([], function() {
 	}
 
 	function createSnow() {
-		var snowTexture;
-		var textureLoader = new THREE.TextureLoader();
-		textureLoader.load('assets/raindrop.png', snowTexture);
-            
 		var snowGeometry = new THREE.Geometry();
-        var snowMaterial = new THREE.PointsMaterial({});
+        var snowMaterial = new THREE.PointsMaterial({ size: 0.1, map: snowflake});
 
 
             var range = 80;
