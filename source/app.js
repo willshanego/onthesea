@@ -46,21 +46,10 @@ require([], function() {
         scene.add(directionalLight);
 
 
-        //init vectors
-        //vectorV = new THREE.Vector3();
-        //vectorA = new THREE.Vector3();
-        //vectorB = new THREE.Vector3();
         //load model
-        // instantiate a loader
-        var loader = new THREE.JSONLoader();
-        // load a resource
-        loader.load(// resource URL
-        'vendor/boat.json', // Function when resource is loaded
-        function(geometry, materials) {
-            var boatmaterial = new THREE.MultiMaterial(materials);
-            var boatobject = new THREE.Mesh(geometry,material);
-            scene.add(boatobject);
-        });
+		var loader = new THREE.JSONLoader(),
+		callbackKey = function(geometry) {createScene(geometry,  0, 0, 0, 15, "chameleon.jpg")};
+		loader.load("chameleon.js", callbackKey);
 
 
         //create planet
@@ -84,7 +73,7 @@ require([], function() {
         moon.translateOnAxis(new THREE.Vector3(0,0,-70), 1);
         scene.add(moon);
 
-
+		//object array
         objects = [planet, moon];
         planet.material.opacity = 1;
 
@@ -118,21 +107,15 @@ require([], function() {
     }, false);
 
     renderer.domElement.addEventListener('mousedown', function(event) {
-        raycaster.setFromCamera(mouse, camera);
-        var intersects = raycaster.intersectObjects(scene.children);
+       raycaster.setFromCamera(mouse, camera);
+       var intersects = raycaster.intersectObjects(scene.children);
 
-        if (intersects.length > 0) {
-            raindrop = intersects[0].point;
-            /*if (INTERSECTED != intersects[0].object) {
-                if (INTERSECTED)
-                    INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
-                INTERSECTED = intersects[0].object;
-                INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-                INTERSECTED.material.emissive.setHex(0xff0000);
-            }*/
-        }
-        createPerpendicularVectors();
-        createWave();
+       if (intersects.length > 0) 
+       	   {
+           raindrop = intersects[0].point;
+     	   }
+       createPerpendicularVectors();
+       createWave();
     }, false);
 
     function createWave() {
@@ -141,7 +124,7 @@ require([], function() {
         var wavematerial = new THREE.LineBasicMaterial({
             color: 0xFFFFFF
         });
-        radius = .1;
+        radius = .2;
         //create a circle, call the animate function, delete the circle
         //find a way to scale it down each time
         //variables to scale: radius, raindrop vector. 
@@ -151,14 +134,15 @@ require([], function() {
 				var theta = (i / segmentCount) * Math.PI * 2;
 				wavegeometry.vertices.push(new THREE.Vector3
 					(
-					 raindrop.x + radius * (Math.cos(theta) * vectorA.x + Math.sin(theta) * vectorB.x),
-					 raindrop.y + radius * (Math.cos(theta) * vectorA.y + Math.sin(theta) * vectorB.y),
-					 raindrop.z + radius * (Math.cos(theta) * vectorA.z + Math.sin(theta) * vectorB.z) 
+					 (raindrop.x+.1) + radius * (Math.cos(theta) * vectorA.x + Math.sin(theta) * vectorB.x),
+					 (raindrop.y+.1) + radius * (Math.cos(theta) * vectorA.y + Math.sin(theta) * vectorB.y),
+					 (raindrop.z+.1) + radius * (Math.cos(theta) * vectorA.z + Math.sin(theta) * vectorB.z) 
 					)
 				);
     	    }
         scene.add(new THREE.Line(wavegeometry,wavematerial));
     }
+
     function createScene(geometry, x, y, z, scale, tmap) {
         zmesh = new THREE.Mesh(geometry,new THREE.MeshLambertMaterial({
             map: THREE.ImageUtils.loadTexture(tmap)
@@ -266,3 +250,10 @@ require([], function() {
         vectorB.normalize();
         console.log(vectorB);
         */
+        /*if (INTERSECTED != intersects[0].object) {
+                if (INTERSECTED)
+                    INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+                INTERSECTED = intersects[0].object;
+                INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+                INTERSECTED.material.emissive.setHex(0xff0000);
+            }*/
