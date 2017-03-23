@@ -15,6 +15,7 @@ require([], function() {
     var objects, raindropArray, raindropCount;
     var normal, zvalue, radius;
     var raindrop, wave, vectorA, vectorB, vectorV, vectorI;
+    var snow, snowflake;
 
     //
     init();
@@ -82,14 +83,30 @@ require([], function() {
         objects = [planet, moon];
         planet.material.opacity = 1;
 
+        //snow
+        var textureLoader = new THREE.TextureLoader();
+		snowflake = textureLoader.load( "assets/snowflake.png" );
+        createSnow();
+
         //renderer
         renderer = new THREE.CanvasRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
+
+        
     }
 
     function animate() {
         requestAnimationFrame(animate);
+        var vertices = snow.geometry.vertices;
+		vertices.forEach(function (v) {
+                v.y = v.y - (v.velocityY);
+                v.x = v.x - (v.velocityX);
+				//see if you can create a vector at the point when these points intersect with
+				//the radius
+                if (v.y <= 0) v.y = 60;
+                if (v.x <= -20 || v.x >= 20) v.velocityX = v.velocityX * -1;
+            });
         /*
         planet.rotation.x = Date.now() * 0.00005;
         planet.rotation.y = Date.now() * 0.0001;
@@ -207,6 +224,33 @@ require([], function() {
 		scene.remove( object );
 	}
 
+	function createSnow() {
+		var snowTexture;
+		var textureLoader = new THREE.TextureLoader();
+		textureLoader.load('assets/raindrop.png', snowTexture);
+            
+		var snowGeometry = new THREE.Geometry();
+        var snowMaterial = new THREE.PointsMaterial({});
+
+
+            var range = 80;
+            for (var i = 0; i < 1500; i++) {
+                var points = new THREE.Vector3(
+                        Math.random() * range - range / 2,
+                        Math.random() * range * 1.5,
+                        Math.random() * range - range / 2);
+                points.velocityY = 0.1 + Math.random() / 5;
+                points.velocityX = (Math.random() - 0.5) / 3;
+                snowGeometry.vertices.push(points);
+            }
+
+        snow = new THREE.Points(snowGeometry, snowMaterial);
+        snow.sortParticles = true;
+
+        scene.add(snow);
+            
+            
+        }
 
 })
 
