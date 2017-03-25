@@ -56,7 +56,7 @@ require([], function() {
 
         //load model
 		var loader = new THREE.JSONLoader(),
-		callbackKey = function(geometry) {createScene(geometry, 4.24, 34.74, -35.68, 1)};
+		callbackKey = function(geometry) {createScene(geometry, 4.24, 34.74, 35.68, 1)};
 		loader.load("assets/boat.js", callbackKey);
 
 
@@ -187,6 +187,7 @@ require([], function() {
         }));
         zmesh.position.set(x, y, z);
         zmesh.scale.set(scale, scale, scale);
+        zmesh.rotate.x(Math.Pi/2);
         //meshes.push(zmesh);
         scene.add(zmesh);
     }
