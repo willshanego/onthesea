@@ -56,7 +56,7 @@ require([], function() {
 
         //load model
 		var loader = new THREE.JSONLoader(),
-		callbackKey = function(geometry) {createScene(geometry,  0, 0, 0, 15, "boat.jpg")};
+		callbackKey = function(geometry) {createScene(geometry, 50, 50, 50, 15, "boat.jpg")};
 		loader.load("assets/boat.js", callbackKey);
 
 
@@ -184,7 +184,7 @@ require([], function() {
         }));
         zmesh.position.set(x, y, z);
         zmesh.scale.set(scale, scale, scale);
-        meshes.push(zmesh);
+        //meshes.push(zmesh);
         scene.add(zmesh);
     }
 
