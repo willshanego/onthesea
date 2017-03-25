@@ -187,7 +187,7 @@ require([], function() {
         }));
         zmesh.position.set(x, y, z);
         zmesh.scale.set(scale, scale, scale);
-        zmesh.rotate.x(Math.Pi/2);
+        //zmesh.rotate.x(Math.Pi/2);
         //meshes.push(zmesh);
         scene.add(zmesh);
     }
