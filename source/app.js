@@ -84,7 +84,7 @@ require([], function() {
 
 		//object array
         objects = [planet, moon];
-        planet.material.opacity = 1;
+        planet.material.opacity = .2;
 
         //snow
 		//snowflake = textureLoader.load( "assets/snowflake.png" );
