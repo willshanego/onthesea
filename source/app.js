@@ -56,7 +56,7 @@ require([], function() {
 
         //load model
 		var loader = new THREE.JSONLoader(),
-		callbackKey = function(geometry) {createScene(geometry, 50, 50, -50, 1)};
+		callbackKey = function(geometry) {createScene(geometry, 4.24, 34.74, -35.68, 1)};
 		loader.load("assets/boat.js", callbackKey);
 
 
@@ -150,6 +150,7 @@ require([], function() {
        	   {
            raindrop = intersects[0].point;
      	   }
+     	   console.log(raindrop);
        createPerpendicularVectors();
        createWave();
     }, false);
