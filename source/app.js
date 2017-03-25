@@ -57,7 +57,7 @@ require([], function() {
         //load model
 		var loader = new THREE.JSONLoader(),
 		callbackKey = function(geometry) {createScene(geometry,  0, 0, 0, 15, "chameleon.jpg")};
-		loader.load("chameleon.js", callbackKey);
+		loader.load("assets/boat.js", callbackKey);
 
 
         //create planet
@@ -87,17 +87,13 @@ require([], function() {
         planet.material.opacity = 1;
 
         //snow
-        var textureLoader = new THREE.TextureLoader();
-		snowflake = textureLoader.load( "assets/snowflake.png" );
+		//snowflake = textureLoader.load( "assets/snowflake.png" );
         createSnow();
-
+        
         //renderer
         renderer = new THREE.CanvasRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-   
-
-        
+        document.body.appendChild(renderer.domElement); 
     }
 
     function animate() {
@@ -112,7 +108,7 @@ require([], function() {
 				if (mathPlanet.containsPoint ( temp ))
 				{
 					raindrop.copy(temp);
-					
+
 				}
                 if (v.y <= 0) v.y = 60;
                 if (v.x <= -20 || v.x >= 20) v.velocityX = v.velocityX * -1;
@@ -206,7 +202,7 @@ require([], function() {
 			 1/vectorV.y, 
 		  -2*(1/vectorV.z)
 		);
-		console.log(vectorA);
+		//console.log(vectorA);
 
 		//var angle = Math.PI / 4;
 		//var axis = new THREE.Vector3(0,0,0).normalize();
@@ -216,9 +212,9 @@ require([], function() {
 		//console.log(vectorA);
 		vectorV.normalize();
 		vectorA.normalize();
-		console.log(vectorV);
-		console.log(vectorA);
-		console.log(vectorA.dot(vectorV));
+		//console.log(vectorV);
+		//console.log(vectorA);
+		//console.log(vectorA.dot(vectorV));
         
         vectorB = new THREE.Vector3();
         vectorB.crossVectors(vectorV, vectorA);
@@ -236,23 +232,24 @@ require([], function() {
 
 	function createSnow() {
 		var snowGeometry = new THREE.Geometry();
-        var snowMaterial = new THREE.PointsMaterial({ size: 0.04, map: snowflake});
+        var snowMaterial = new THREE.PointsMaterial({ size: 0.04 });
 
 
-            var range = 10;
-            for (var i = 0; i < 1500; i++) {
-                var points = new THREE.Vector3(
-                        (Math.random()+1) * range - range / 2,
-                        (Math.random()+1) * range * 1.5,
-                        (Math.random()+3.5) * range - range / 2);
-                points.velocityY = 0.1 + Math.random() / 5;
-                points.velocityX = (Math.random() - 0.5) / 3;
-                snowGeometry.vertices.push(points);
-            }
+        var range = 10;
+        for (var i = 0; i < 1500; i++) {
+            var points = new THREE.Vector3
+            (
+                (Math.random()+1) * range - range / 2,
+              	(Math.random()+1) * range * 1.5,
+              	(Math.random()+3.5) * range - range / 2
+            );
+            points.velocityY = 0.1 + Math.random() / 5;
+            points.velocityX = (Math.random() - 0.5) / 3;
+            snowGeometry.vertices.push(points);
+        }
 
         snow = new THREE.Points(snowGeometry, snowMaterial);
         snow.sortParticles = true;
-
         scene.add(snow);
             
             
