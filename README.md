@@ -1,8 +1,8 @@
 on the sea
 ==========
 
-Demo app with three.js node.js heroku-ready.
-Ths is basic webGL application. It uses three.js as webGL engine, external 3D model is managed by Bower.
+simple project for spring semester 2017 seminar presentation.
+designed by: will goodrow
 
-####version 0.0 
+####version 1.0
 
