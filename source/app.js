@@ -56,7 +56,7 @@ require([], function() {
 
         //load model
 		var loader = new THREE.JSONLoader(),
-		callbackKey = function(geometry) {createScene(geometry, 50, 50, 50, 15)};
+		callbackKey = function(geometry) {createScene(geometry, 50, 50, -50, 15)};
 		loader.load("assets/boat.js", callbackKey);
 
 
