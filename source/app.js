@@ -56,7 +56,7 @@ require([], function() {
 
         //load model
 		var loader = new THREE.JSONLoader(),
-		callbackKey = function(geometry) {createScene(geometry, 4.24, 34.74, 35.68, 1)};
+		callbackKey = function(geometry) {createScene(geometry, 10.24, 41.74, 20.68, 1)};
 		loader.load("assets/boat.js", callbackKey);
 
 
@@ -84,7 +84,7 @@ require([], function() {
 
 		//object array
         objects = [planet, moon];
-        planet.material.opacity = .5;
+        planet.material.opacity = 1;
 
         //snow
 		//snowflake = textureLoader.load( "assets/snowflake.png" );
@@ -187,9 +187,10 @@ require([], function() {
         }));
         zmesh.position.set(x, y, z);
         zmesh.scale.set(scale, scale, scale);
-        //zmesh.rotate.x(Math.Pi/2);
         //meshes.push(zmesh);
         scene.add(zmesh);
+        zmesh.rotation.x = 1;
+        zmesh.rotation.y = .8;
     }
 
     function createPerpendicularVectors() {
@@ -244,7 +245,7 @@ require([], function() {
             var points = new THREE.Vector3
             (
                 (Math.random()+1) * range - range / 2,
-              	(Math.random()+1) * range * 1.5,
+              	(Math.random()+1.1) * range * 1.5,
               	(Math.random()+3.5) * range - range / 2
             );
             points.velocityY = 0.1 + Math.random() / 5;
