@@ -45,13 +45,13 @@ require([], function() {
 
 
         //create light
-        /*
+        
         ambient = new THREE.AmbientLight(0x666666);
         directionalLight = new THREE.DirectionalLight(0xffeedd);
         directionalLight.position.set(0, 70, 100).normalize();
         scene.add(ambient);
         scene.add(directionalLight);
-        */
+        
 
 
         //load model
@@ -63,7 +63,7 @@ require([], function() {
         //create planet
         planetRadius = 50;
         planetgeo = new THREE.SphereBufferGeometry(planetRadius,100,100);
-        planetmaterial = new THREE.MeshBasicMaterial({
+        planetmaterial = new THREE.MeshPhongMaterial({
             shading: THREE.SmoothShading,
             overdraw: true,
             color: 0x0077BE
@@ -84,7 +84,7 @@ require([], function() {
 
 		//object array
         objects = [planet, moon];
-        planet.material.opacity = .2;
+        planet.material.opacity = .5;
 
         //snow
 		//snowflake = textureLoader.load( "assets/snowflake.png" );
@@ -105,7 +105,7 @@ require([], function() {
                 var temp = new THREE.Vector3(v.x,v.y,v.z);
 				//see if you can create a vector at the point when these points intersect with
 				//the radius
-				if (mathPlanet.containsPoint ( temp ))
+				if (-.05 < mathPlanet.distanceToPoint ( temp ) && mathPlanet.distanceToPoint ( temp ) < 0)
 				{
 					raindrop.copy(temp);
 
@@ -113,18 +113,21 @@ require([], function() {
                 if (v.y <= 0) v.y = 60;
                 if (v.x <= -20 || v.x >= 20) v.velocityX = v.velocityX * -1;
             });
-        /*
-        planet.rotation.x = Date.now() * 0.00005;
-        planet.rotation.y = Date.now() * 0.0001;
         directionalLight.rotation.x = Date.now() * 0.05;
         directionalLight.rotation.y = Date.now() * 0.1;
         directionalLight.rotation.z = Date.now() * 0.1;
+        /*
+        planet.rotation.x = Date.now() * 0.00005;
+        planet.rotation.y = Date.now() * 0.0001;
         moon.rotation.x = Date.now() * 0.00005;
         moon.rotation.y = Date.now() * 0.0001;
         moon.rotation.z += 0.001;
-        */
+      
+          */
+        
        	createPerpendicularVectors();
 		createWave();
+		
         	
         //controls.update(clock.getDelta());
         //createwave();
@@ -179,7 +182,7 @@ require([], function() {
     }
 
     function createScene(geometry, x, y, z, scale) {
-        zmesh = new THREE.Mesh(geometry,new THREE.MeshLambertMaterial({
+        zmesh = new THREE.Mesh(geometry,new THREE.MeshPhongMaterial({
         }));
         zmesh.position.set(x, y, z);
         zmesh.scale.set(scale, scale, scale);
